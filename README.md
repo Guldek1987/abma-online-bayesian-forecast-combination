@@ -118,11 +118,13 @@ forecast origin. Each update costs $`O(K)`$ operations per store-day for $`K`$ a
 
 ## Results
 
+In every table, bold marks the best value of each column (lowest error, coverage closest to the nominal 90%, shortest time); in the transfer table it marks the lower RMSPE of ABMA and the best comparator. The name of the proposed model, ABMA, is always in bold; its values are bold only where they are the best.
+
 ### Rossmann: development blocks (best eight methods)
 
 | Model | Pooled | F2 | F3 | V | Holm p |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| **ABMA** | 0.11847 | 0.1075 | 0.1096 | 0.1305 | – |
+| **ABMA** | **0.11847** | **0.1075** | **0.1096** | **0.1305** | – |
 | Drift-reset NNLS | 0.11949 | 0.1098 | 0.1101 | 0.1311 | 0.104 |
 | Mean of three best agents | 0.12047 | 0.1094 | 0.1112 | 0.1328 | 0.011 |
 | Rolling NNLS | 0.12064 | 0.1098 | 0.1101 | 0.1335 | 0.011 |
@@ -135,15 +137,15 @@ forecast origin. Each update costs $`O(K)`$ operations per store-day for $`K`$ a
 
 | Model | Type | RMSPE | RMSE | MAE | ΔRMSPE [95% CI] | Holm p (stores) | Holm p (days) |
 | --- | --- | ---: | ---: | ---: | --- | ---: | ---: |
-| **ABMA** | proposed | 0.09998 | 761.6 | 522.7 | – | – | – |
-| Fixed share | combiner | 0.10083 | 737.4 | 510.1 | -0.00085 [-0.00145, -0.00035] | 0.005 | 1.000 |
+| **ABMA** | proposed | **0.09998** | 761.6 | 522.7 | – | – | – |
+| Fixed share | combiner | 0.10083 | **737.4** | 510.1 | -0.00085 [-0.00145, -0.00035] | 0.005 | 1.000 |
 | Drift-reset NNLS | combiner | 0.10084 | 752.0 | 517.1 | -0.00087 [-0.00156, -0.00026] | 0.013 | 1.000 |
 | Rolling NNLS | combiner | 0.10118 | 746.9 | 518.1 | -0.00120 [-0.00159, -0.00082] | 0.005 | 1.000 |
 | Dynamic model averaging | combiner | 0.10127 | 740.1 | 511.8 | -0.00129 [-0.00179, -0.00086] | 0.005 | 1.000 |
 | Dynamic weighted majority | combiner | 0.10131 | 738.7 | 510.3 | -0.00133 [-0.00223, -0.00062] | 0.005 | 1.000 |
 | Mean of three boosters | combiner | 0.10139 | 739.7 | 512.9 | -0.00141 [-0.00176, -0.00105] | 0.005 | 1.000 |
 | Mean of three best agents | combiner | 0.10143 | 745.9 | 515.9 | -0.00145 [-0.00183, -0.00108] | 0.005 | 1.000 |
-| Mean of all agents | combiner | 0.10160 | 742.8 | 509.4 | -0.00162 [-0.00256, -0.00081] | 0.005 | 1.000 |
+| Mean of all agents | combiner | 0.10160 | 742.8 | **509.4** | -0.00162 [-0.00256, -0.00081] | 0.005 | 1.000 |
 | Nonlinear stacking | combiner | 0.10199 | 773.4 | 524.5 | -0.00201 [-0.00268, -0.00123] | 0.005 | 1.000 |
 | LightGBM | single model | 0.10225 | 745.8 | 516.6 | -0.00227 [-0.00284, -0.00179] | 0.005 | 1.000 |
 | Best single agent | combiner | 0.10227 | 776.2 | 529.5 | -0.00229 [-0.00282, -0.00164] | 0.005 | 1.000 |
@@ -165,8 +167,8 @@ not absolute, error.
 
 | Model | RMSPE | RMSE | MAE | Holm p |
 | --- | ---: | ---: | ---: | ---: |
-| **ABMA** | 0.10119 | 824.0 | 542.9 | – |
-| Dynamic weighted majority | 0.10229 | 804.6 | 532.1 | 0.040 |
+| **ABMA** | **0.10119** | 824.0 | 542.9 | – |
+| Dynamic weighted majority | 0.10229 | **804.6** | **532.1** | 0.040 |
 | Fixed share | 0.10236 | 805.1 | 533.2 | 0.040 |
 | Drift-reset NNLS | 0.10333 | 823.2 | 544.4 | 0.040 |
 | Mean of three boosters | 0.10342 | 808.0 | 537.9 | 0.003 |
@@ -176,8 +178,8 @@ not absolute, error.
 
 | Interval model | Coverage of 90% interval | Mean width, EUR | Relative width |
 | --- | ---: | ---: | ---: |
-| ABMA mixture | 91.2% | 2265 | 0.322 |
-| Quantile LightGBM | 79.3% | 1619 | 0.236 |
+| **ABMA** mixture | **91.2%** | 2265 | 0.322 |
+| Quantile LightGBM | 79.3% | **1619** | **0.236** |
 
 <p align="center"><img src="figures/5_quantile_reliability_final_period.png" width="420" alt="Quantile reliability"></p>
 
@@ -203,11 +205,11 @@ share 0.995 → 0.021) and returns it after recovery (0.896).
 
 | Panel | ABMA RMSPE | Best comparator | Comparators with lower RMSPE | Significantly better than ABMA | Significantly worse than ABMA | ABMA RMSE / MAE |
 | --- | ---: | --- | ---: | ---: | ---: | ---: |
-| UCI, core products | 0.4595 | Positive-history action (0.4386) | 2 of 22 | 1 | 20 | 5.08 / 3.33 |
-| UCI, external products | 0.5210 | Positive-history action (0.5295) | 0 of 22 | – | – | 5.72 / 3.88 |
-| M5, core series, arm A | 0.7146 | Rolling NNLS (0.6157) | 13 of 22 | 0 | 8 | 13.55 / 5.34 |
-| M5, core series, arm B | 0.6977 | Rolling NNLS (0.6157) | 10 of 22 | 2 | 8 | 13.06 / 5.19 |
-| M5, external series, arm A | 1.2489 | Nonlinear stacking (0.6448) | 14 of 22 | – | – | 14.58 / 5.30 |
+| UCI, core products | 0.4595 | Positive-history action (**0.4386**) | 2 of 22 | 1 | 20 | 5.08 / 3.33 |
+| UCI, external products | **0.5210** | Positive-history action (0.5295) | 0 of 22 | – | – | 5.72 / 3.88 |
+| M5, core series, arm A | 0.7146 | Rolling NNLS (**0.6157**) | 13 of 22 | 0 | 8 | 13.55 / 5.34 |
+| M5, core series, arm B | 0.6977 | Rolling NNLS (**0.6157**) | 10 of 22 | 2 | 8 | 13.06 / 5.19 |
+| M5, external series, arm A | 1.2489 | Nonlinear stacking (**0.6448**) | 14 of 22 | – | – | 14.58 / 5.30 |
 
 Comparators: 12 single models and 10 combiners. Significance: Holm-adjusted cluster bootstrap, p < 0.05. RMSPE is
 computed on positive targets. On M5 the ablation without the reliability gate is the best variant (0.6142, Holm p
@@ -220,7 +222,7 @@ against 0.637 and 0.621 without the gate).
 
 | Combiner (Rossmann, full stream of 370,863 store-day updates) | Time, s |
 | --- | ---: |
-| Drift-reset NNLS (Page-Hinkley) | 0.10 |
+| Drift-reset NNLS (Page-Hinkley) | **0.10** |
 | Rolling NNLS | 0.11 |
 | Fixed-share exponential weighting | 0.20 |
 | Dynamic weighted majority | 0.23 |
