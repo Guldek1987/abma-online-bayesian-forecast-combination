@@ -34,7 +34,7 @@ How the data are used:
   are modelled (844,338 store-days); closed days are structural zeros, not missing values. 112 randomly drawn stores
   are held out from all training; the other 1003 stores are split in time into training (2013–2014), validation
   (January–April 2015) and the final evaluation period (May–July 2015). Actual sales are assumed to become available
-  seven days after the sales day, so every predictor of day $t$ uses sales up to day $t-7$ only, and same-day customer
+  seven days after the sales day, so every predictor of day $`t`$ uses sales up to day $`t-7`$ only, and same-day customer
   counts enter only as lagged values. Models are trained on log sales; RMSPE is computed in euros.
 - **UCI Sales Transactions Weekly (weekly transfer panel, part B).** The raw weekly quantities W0–W51 are used; the
   normalised columns are not. 729 products form the core panel and 82 products are held out; weeks 40–51 are the test
@@ -71,23 +71,28 @@ https://doi.org/10.1016/j.ijforecast.2021.11.013.
 
 <p align="center"><img src="figures/2_abma_architecture.png" width="760" alt="ABMA architecture"></p>
 
-For store $s$, day $t$ and agent $k$ with log forecast $\hat{\ell}^{(k)}_{s,t}$, the online layer keeps
+For store $`s`$, day $`t`$ and agent $`k`$ with log-sales forecast $`\hat{\ell}^{(k)}_{s,t}`$, the online layer keeps
 
-- a **predictive density** $\ell_{s,t}\mid k \sim \mathcal{N}(\hat{\ell}^{(k)}_{s,t}, \sigma^2_{k,s,t})$ with a
-  discounted per-store residual variance and a weekday × promotion context multiplier;
-- **tempered posterior weights** $w_{k,s,t}\propto a_{k,s,t}\exp(\eta \bar{L}_k)$ from discounted log scores
-  ($\eta=0.5$);
-- a **reliability gate with reactivation**: the share of days on which an agent is not worse than the pool median has
-  a discounted Beta posterior; the agent is inactive in a store while $P(\theta_{k,s}<0.5)\ge 0.9$ and returns when its
-  accuracy recovers;
-- the **Bayes action** for the squared percentage error of the lognormal mixture,
+- a **predictive density** $`\ell_{s,t} \mid k \sim \mathcal{N}\big(\hat{\ell}^{(k)}_{s,t},\ \sigma^{2}_{k,s,t}\big)`$, where
+  $`\sigma^{2}_{k,s,t}`$ combines a discounted per-store residual variance with a weekday × promotion context
+  multiplier;
+- **tempered posterior weights** $`w_{k,s,t} \propto a_{k,s,t}\,\exp\big(\eta\,\bar{L}_{k}\big)`$, where $`\bar{L}_{k}`$ is
+  the discounted log score of agent $`k`$, $`a_{k,s,t} \in \{0, 1\}`$ is its activity indicator and $`\eta = 0.5`$;
+- a **reliability gate with reactivation**: the share $`\theta_{k,s}`$ of days on which agent $`k`$ is not worse than
+  the pool median in store $`s`$ has a discounted Beta posterior; the agent is inactive in that store while
+  $`P(\theta_{k,s} < 0.5) \ge 0.9`$ and returns when its accuracy recovers;
+- the **Bayes action** for the squared percentage error of the lognormal mixture, together with 90% mixture
+  quantiles:
 
-$$\hat{y}_{s,t}=\frac{\mathrm{E}[y^{-1}]}{\mathrm{E}[y^{-2}]}=\frac{\sum_k w_{k,s,t}\exp\left(-\hat{\ell}^{(k)}_{s,t}+\tfrac12\sigma^2_{k,s,t}\right)}{\sum_k w_{k,s,t}\exp\left(-2\hat{\ell}^{(k)}_{s,t}+2\sigma^2_{k,s,t}\right)},$$
-
-  together with 90% mixture quantiles.
+```math
+\hat{y}_{s,t}
+= \frac{\mathrm{E}\left[y^{-1}\right]}{\mathrm{E}\left[y^{-2}\right]}
+= \frac{\sum_{k} w_{k,s,t}\,\exp\left(-\hat{\ell}^{(k)}_{s,t} + \tfrac{1}{2}\sigma^{2}_{k,s,t}\right)}
+       {\sum_{k} w_{k,s,t}\,\exp\left(-2\hat{\ell}^{(k)}_{s,t} + 2\sigma^{2}_{k,s,t}\right)}.
+```
 
 All updates use only labels published at least seven days (Rossmann) or two weeks (weekly panels) before the
-forecast origin. Each update costs $O(K)$ operations per store-day for $K$ agents.
+forecast origin. Each update costs $`O(K)`$ operations per store-day for $`K`$ agents.
 
 ## Data and evaluation protocol
 
@@ -292,7 +297,7 @@ jupyter nbconvert --to notebook --execute --inplace 01_dataset_analysis_and_rese
 | `6_m5_sealed_weekly_rmspe_and_active_agents.png` | M5 test weeks: weekly RMSPE and active agents |
 | `7_online_layer_scalability.png` | time and memory of the online layer by stores and agents |
 | `S1`–`S5` | Rossmann study design, data quality, sales distribution, group differences, temporal coverage |
-| `S6`–`S8` | agent population and weights, final period by month, sensitivity to $\eta$ and $p_{\mathrm{off}}$ |
+| `S6`–`S8` | agent population and weights, final period by month, sensitivity to $`\eta`$ and $`p_{\text{off}}`$ |
 | `S9`–`S10` | UCI: RMSPE differences, weekly RMSPE and active agents |
 | `S11`–`S13` | M5: RMSPE differences, quantile reliability, scalability |
 
