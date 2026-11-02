@@ -13,6 +13,47 @@ the Bayes action for the squared percentage error, which is the loss behind the 
 revenue of the Rossmann chain (seven-day label delay) and two weekly count panels (UCI Sales Transactions Weekly
 and M5/Walmart, two-week lag).
 
+## Datasets
+
+The study uses three public retail sales panels. All raw files read by the notebooks live in [`dataset/`](dataset/):
+[`dataset/README.md`](dataset/README.md) lists the files with their SHA-256 checksums, and
+[`dataset/download_data.py`](dataset/download_data.py) fetches the two files that are not stored in this repository
+and verifies all of them.
+
+| | Rossmann Store Sales | UCI Sales Transactions Weekly | M5 Forecasting – Accuracy |
+|---|---|---|---|
+| Original source | [Kaggle competition](https://www.kaggle.com/competitions/rossmann-store-sales) | [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/396/sales+transactions+dataset+weekly), DOI [10.24432/C5XS4Q](https://doi.org/10.24432/C5XS4Q) | [Kaggle competition](https://www.kaggle.com/competitions/m5-forecasting-accuracy); copy on Zenodo, DOI [10.5281/zenodo.12636070](https://doi.org/10.5281/zenodo.12636070) |
+| Content | 1,017,209 daily records of 1115 Rossmann stores, 1 January 2013 – 31 July 2015: sales in euros, customers, opening flag, promotion, state and school holidays; static store attributes (store type, assortment, competitor distance and opening date, long-running promotion) | weekly purchased quantities of 811 products over 52 weeks (raw columns W0–W51 and their normalised copies) | daily unit sales of 30,490 Walmart item-store series (3049 items in 10 stores in California, Texas and Wisconsin), 29 January 2011 – 22 May 2016 (1941 days), with a calendar of events and SNAP days and weekly sell prices |
+| Files used | `train.csv`, `store.csv` | `Sales_Transactions_Dataset_Weekly.csv` in `source.zip` | `sales_train_evaluation.csv`, `calendar.csv`, `sell_prices.csv` in `m5-forecasting-accuracy.zip` |
+| Licence / terms | Kaggle competition rules | CC BY 4.0 | Kaggle competition rules; the Zenodo copy is labelled CC BY 4.0 |
+| In this repository | `dataset/raw/rossmann/`, downloaded with the Kaggle API (redistribution is not permitted) | stored in `dataset/raw/UCI_SalesTransactionsWeekly/source.zip` | `dataset/raw/m5/`, downloaded from Zenodo by the script |
+
+How the data are used:
+
+- **Rossmann (primary panel, part A of every notebook).** Only days on which a store was open and had positive sales
+  are modelled (844,338 store-days); closed days are structural zeros, not missing values. 112 randomly drawn stores
+  are held out from all training; the other 1003 stores are split in time into training (2013–2014), validation
+  (January–April 2015) and the final evaluation period (May–July 2015). Actual sales are assumed to become available
+  seven days after the sales day, so every predictor of day $t$ uses sales up to day $t-7$ only, and same-day customer
+  counts enter only as lagged values. Models are trained on log sales; RMSPE is computed in euros.
+- **UCI Sales Transactions Weekly (weekly transfer panel, part B).** The raw weekly quantities W0–W51 are used; the
+  normalised columns are not. 729 products form the core panel and 82 products are held out; weeks 40–51 are the test
+  weeks, and labels become available with a delay of two weeks. About a quarter of the targets are zero, so RMSPE is
+  computed on positive targets.
+- **M5 (weekly transfer panel, part C).** Daily unit sales are summed to 277 complete weeks. 27,441 series form the core
+  panel and 3049 series are held out; weeks 265–276 are the test weeks and were read once, after the model configuration
+  had been fixed. Labels become available with a delay of two weeks; weekly prices, events and SNAP days enter as
+  covariates known in advance.
+- The two weekly panels test whether the configuration fixed on Rossmann transfers to small, intermittent counts
+  without retuning. All intermediate data (merged panels, causal features, splits, forecasts) are rebuilt by the
+  notebooks in `outputs/`.
+
+Data references: Rossmann Store Sales, Kaggle, 2015; J. Tan, *Sales Transactions Weekly*, UCI Machine Learning
+Repository, 2014, https://doi.org/10.24432/C5XS4Q (data described in S. C. Tan and J. P. S. Lau, 2014,
+https://doi.org/10.1007/978-981-4585-18-7_28); S. Makridakis, E. Spiliotis and V. Assimakopoulos, *M5 accuracy
+competition: Results, findings, and conclusions*, International Journal of Forecasting 38 (2022) 1346–1364,
+https://doi.org/10.1016/j.ijforecast.2021.11.013.
+
 ## Highlights
 
 - **Rossmann, final period (May–July 2015, 1003 stores):** RMSPE 0.09998 against 0.10083 for the best of ten
