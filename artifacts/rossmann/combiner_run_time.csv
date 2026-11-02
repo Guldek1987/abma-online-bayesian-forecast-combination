@@ -1,0 +1,8 @@
+Combiner,Seconds
+ABMA online layer (14 agents),3.330112934112549
+Rolling NNLS,0.1104421615600586
+Nonlinear stacking,18.260473012924194
+Dynamic model averaging,1.4869859218597412
+Fixed-share exponential weighting,0.20368719100952148
+Dynamic weighted majority,0.2336440086364746
+Drift-reset NNLS (Page-Hinkley),0.0988149642944336

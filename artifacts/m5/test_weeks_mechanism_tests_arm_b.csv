@@ -1,0 +1,7 @@
+Component removed,Kind,Difference (ABMA-B - ablation),Holm p (all comparators),Significantly worse without it
+No Bayes action (posterior mean of log forecast),protected,-0.22913709262562088,0.0116,True
+Uniform weights over active agents,protected,-0.048371888982010613,1,False
+No persistent gate,protected,0.08213641423004303,0.0116,False
+No reactivation,protected,-0.016189941489811566,0.0116,True
+Log-mass weights instead of the decision-loss criterion,arm-B component,-0.02071919097463526,1,False
+Weight discount of arm A (0.99),arm-B component,-0.010845722901534072,0.0216,True

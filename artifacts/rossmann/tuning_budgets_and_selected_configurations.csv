@@ -1,0 +1,8 @@
+Method,Configurations,Best mean RMSPE,Selected
+ABMA,40,0.1156809889136143,"{'eta': 0.5, 'disc_w': 0.99, 'disc_var': 0.995, 'gate_loss': 'relative', 'sig_scale': 0.9, 'theta0': 0.5, 'gate_p': 0.9, 'disc_beta': 0.9, 'kappa': 0.0}"
+Dynamic model averaging,80,0.11883309301091678,"{'disc_w': 0.999, 'eta': 1.0}"
+Rolling NNLS,80,0.11781720444253767,"{'window': 56, 'lam': 100.0, 'pool': 'no_nets'}"
+Nonlinear stacking,80,0.13071634300418702,"{'n_estimators': 800.0, 'learning_rate': 0.03, 'num_leaves': 15.0, 'min_child_samples': 200.0, 'colsample_bytree': 0.5, 'reg_lambda': 0.0, 'weight': 1.0, 'pool': 'no_nets'}"
+Fixed-share exponential weighting,80,0.11829667977459209,"{'eta': 3.0, 'alpha': 0.0, 'scope': 'store'}"
+Dynamic weighted majority,72,0.11869515465775193,"{'beta': 0.7, 'theta': 0.01, 'eps': 0.2, 'period': 1}"
+Drift-reset NNLS (Page-Hinkley),30,0.11701224022134808,"{'delta': 0.01, 'lam_ph': 0.2}"
